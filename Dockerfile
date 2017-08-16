@@ -1,7 +1,7 @@
-FROM java:8-jre
+FROM openjdk:8-jre
 
 ENV KEYCLOAK_VERSION 3.2.1.Final
-ENV ALPN_BOOT_VERSION 8.1.9.v20160720
+ENV ALPN_BOOT_VERSION 8.1.11.v20170118
 
 RUN curl -L https://downloads.jboss.org/keycloak/${KEYCLOAK_VERSION}/keycloak-proxy-${KEYCLOAK_VERSION}.zip -O \
   && unzip keycloak-proxy-${KEYCLOAK_VERSION}.zip \
