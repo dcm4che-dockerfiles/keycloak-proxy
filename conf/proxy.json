@@ -1,0 +1,32 @@
+{
+    "target-url": "${env.TARGET_URL}",
+    "bind-address": "0.0.0.0",
+    "http-port": "${env.HTTP_PORT}",
+    "https-port": "${env.HTTPS_PORT}",
+    "keystore": "${env.KEYSTORE}",
+    "keystore-password": "${env.KEYSTORE_PASSWORD}",
+    "key-password": "${env.KEY_PASSWORD}",
+    "applications": [
+        {
+            "base-path": "${env.BASE_PATH}",
+            "adapter-config": {
+                "realm": "${env.REALM_NAME}",
+                "auth-server-url": "${env.AUTH_SERVER_URL}",
+                "public-client": true,
+                "resource": "${env.CLIENT_ID}",
+                "ssl-required": "${env.SSL_REQUIRED}",
+                "truststore": "${env.TRUSTSTORE}",
+                "truststore-password": "${env.TRUSTSTORE_PASSWORD}",
+                "allow-any-hostname": "${env.ALLOW_ANY_HOSTNAME}"
+            },
+            "constraints": [
+                {
+                    "pattern": "/*",
+                    "roles-allowed": [
+                        "${env.ROLE_ALLOWED}"
+                    ]
+                }
+            ]
+        }
+    ]
+}
