@@ -1,61 +1,17 @@
-### Keycloak-proxy Docker image
+# Keycloak-proxy Docker image
 
 This is a Dockerfile for Keycloak-proxy which can be used for securing Kibana which is used as an Audit Record Repository for the archive.
 
-Before running the Keycloak-proxy container, you have to start a Keycloak container and Archive container linked with logstash
+## Supported tags and respective `Dockerfile` links
 
-```bash
-> $docker run --name elasticsearch \
-           -p 9200:9200 \
-           -p 9300:9300 \
-           -v /var/local/dcm4chee-arc/elasticsearch:/usr/share/elasticsearch/data \
-           -d elasticsearch:5.2.2
-```
+- [`3.2.1-1` (*3.2.1-1/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak-proxy/blob/master/Dockerfile)
 
-```bash
-> $docker run --name logstash \
-           -p 12201:12201/udp \
-           -p 8514:8514/udp \
-           -p 8514:8514 \
-           -v /var/local/dcm4chee-arc/elasticsearch:/usr/share/elasticsearch/data \
-           --link elasticsearch:elasticsearch \
-           -d dcm4che/logstash-dcm4chee:5.2.2-2
-```
+## How to use this image
 
-```bash
-> $docker run --name kibana \
-           -p 5601:5601 \
-           --link elasticsearch:elasticsearch \
-           -d kibana:5.2.2
-```
+See [Running on Docker](https://github.com/dcm4che/dcm4chee-arc-light/wiki/Running-on-Docker) at the
+[dcm4che Archive 5 Wiki](https://github.com/dcm4che/dcm4chee-arc-light/wiki).
 
-You have to link the keycloak container with the _OpenLDAP_ (alias:`ldap`):
-
-```bash
-> $docker run --name keycloak \
-           -p 8880:8880 \
-           -p 8843:8843 \
-           -p 8990:8990 \
-           -v /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone \
-           --link slapd:ldap \
-           -d dcm4che/keycloak:3.2.1-1
-```
-
-If you want to store Keycloak's System logs and Audit Messages in
-[Elasticsearch](https://www.elastic.co/products/elasticsearch), you also have to link the keycloak container
-with the _Logstash_ (alias:`logstash`) container:
-```bash
-> $docker run --name keycloak \
-           -p 8880:8880 \
-           -p 8843:8843 \
-           -p 8990:8990 \
-           -v /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone \
-           --link slapd:ldap \
-           --link logstash:logstash \
-           -d dcm4che/keycloak:3.2.1-1-logstash
-```
-
-#### Environment Variables 
+## Environment Variables 
 
 Below explained environment variables can be set as per one's application to override the default values if need be.
 An example of how one can set an env variable in `docker run` command is shown below :
@@ -65,116 +21,69 @@ An example of how one can set an env variable in `docker run` command is shown b
 _**Note**_ : If default values of any environment variables were overridden in startup of `slapd` container, 
 then ensure that the same values are also used for overriding the defaults during startup of keycloak container. 
 
-##### `LDAP_BASE_DN`
+#### `HTTP_PORT`
 
-This environment variable sets the base domain name for LDAP. Default value is _**dc=dcm4che,dc=org**_.
+This environment variable sets the Http port of Wildfly. Default value is `8080`.
 
-##### `LDAP_ROOTPASS`
+#### `HTTPS_PORT`
 
-This environment variable sets the root password for LDAP. Default value is _**secret**_. 
+This environment variable sets the Https port of Wildfly. Default value is `8443`.
 
-##### `LDAP_CONFIGPASS`
+#### `KEYSTORE`
 
-This environment variable sets the password for users who wish to change the schema configuration in LDAP. 
-Default value is _**secret**_. 
+This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is 
+`/opt/keycloak-proxy/conf/key.jks`.
 
-##### `KEYCLOAK_DEVICE_NAME`
+#### `KEYSTORE_PASSWORD`
 
-This is the name of _**keycloak**_ device that is configured in LDAP. Default value is _**keycloak**_
+This environment variables sets the password of the keystore used in ssl server identities in Wildfly configuration. Default value is `secret`.
 
-##### `AUTH_SERVER_URL`
+#### `KEY_PASSWORD`
 
-This environment variable is used to match auth-server-url used in the wildfly configuration for Keycloak. Default value is /auth.
+This environment variables sets the password of the key used in ssl server identities in Wildfly configuration. Default value is `secret`.
 
-##### `REALM_NAME`
+#### `TRUSTSTORE`
 
-This is the name of the realm configured in Keycloak for securing archive UI and RESTful services. Default value is _**dcm4che**_. 
+This environment variable sets the truststore which will be used to verify Keycloak's certificate in Https communication.
+Default value is `/opt/keycloak-proxy/conf/cacerts.jks`.
 
-#### Use Docker Compose
+#### `TRUSSTORE_PASSWORD`
 
-Alternatively you may use [Docker Compose](https://docs.docker.com/compose/) to take care for starting and linking
-the containers, by specifying the services in a configuration file `docker-compose.yml` (e.g.):
+This environment variable sets the password of the above truststore. Default value is `secret`.
 
-````yaml
-version: "2"
-services:
-  slapd:
-    image: dcm4che/slapd-dcm4chee:2.4.44-10.5
-    ports:
-      - "389:389"
-    env_file: docker-compose.env
-    volumes:
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-      - /var/local/dcm4chee-arc/ldap:/var/lib/ldap
-      - /var/local/dcm4chee-arc/slapd.d:/etc/ldap/slapd.d
-  elasticsearch:
-    image: elasticsearch:5.2.2
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-      - /var/local/dcm4chee-arc/elasticsearch:/usr/share/elasticsearch/data
-  kibana:
-    image: kibana:5.2.2
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch:elasticsearch
-    volumes:
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-  logstash:
-    image: dcm4che/logstash-dcm4chee:5.2.2-2
-    ports:
-      - "12201:12201/udp"
-      - "8514:8514/udp"
-      - "8514:8514"
-    links:
-      - elasticsearch:elasticsearch
-    volumes:
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-  keycloak:
-    image: dcm4che/keycloak:3.2.1-1
-    ports:
-      - "8880:8880"
-      - "8843:8843"
-      - "8990:8990"
-    env_file: docker-compose.env
-    environment:
-      HTTP_PORT: 8880
-      HTTPS_PORT: 8843
-      MANAGEMENT_HTTP_PORT: 8990
-      KEYCLOAK_WAIT_FOR: ldap:389 logstash:8514
-    links:
-      - slapd:ldap
-      - logstash:logstash
-    volumes:
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-      - /var/local/dcm4chee-arc/keycloak:/opt/keycloak/standalone
-````
+#### `ALLOW_ANY_HOSTNAME`
 
-and environment in the referenced file `docker-compose.env` (e.g.):
+If the Keycloak server requires HTTPS and this config option is set to true the Keycloak server’s certificate is 
+validated via the truststore, but host name validation is not done. Default value set is `true`.
 
-````INI
-LDAP_BASE_DN=dc=dcm4che,dc=org
-LDAP_ORGANISATION=dcm4che.org
-LDAP_ROOTPASS=secret
-LDAP_CONFIGPASS=secret
-KEYCLOAK_DEVICE_NAME=keycloak
-REALM_NAME=dcm4che
-AUTH_SERVER_URL=https://gunter-nb:8843/auth
-````
+#### `AUTH_SERVER_URL`
 
-and starting them by
-```bash
-> $docker-compose up -d
-````
+This environment variable is used to match auth-server-url used in the wildfly configuration for Keycloak. Default value is 
+`https://keycloak:8443/auth`.
 
-#### Web Service URLs
-- Keycloak Administration Console: <http://localhost:8880>, login with Username: `admin`, Password: `admin`.
-- Kibana UI: <http://localhost:5601>
+#### `SSL_REQUIRED`
+
+This environment variable defines the SSL/HTTPS requirements for interacting with the realm. Default value is `external`.
+Values which are accepted are : `external`, `none` or `all`.
+
+#### `REALM_NAME`
+
+This is the name of the realm configured in Keycloak for securing audit record repository. Default value is `dcm4che`. 
+
+#### `CLIENT_ID`
+
+This environment variable sets the client ID for the Kibana client. This value is used in creation of client for securing 
+audit record repository which is running on Kibana. Default value set is `kibana`.
+
+#### `TARGET_URL`
+
+This environment variable sets the URL this server is proxying, and is REQUIRED. Default value is `http://kibana:5601`.
+
+#### `BASE_PATH`
+
+This environment variable sets the base context root for the application. Must start with '/' and is REQUIRED. Default 
+value is `/`.
+
+#### `ROLE_ALLOWED`
+
+This environment variable sets the role of the user which will be allowed to use this service. Default value is `auditlog`.
