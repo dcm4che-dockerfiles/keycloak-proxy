@@ -4,7 +4,7 @@ This is a Dockerfile for Keycloak-proxy which can be used for securing Kibana wh
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`3.2.1-1` (*3.2.1-1/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak-proxy/blob/master/Dockerfile)
+- [`3.3.0-1` (*3.3.0-1/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak-proxy/blob/master/Dockerfile)
 
 ## How to use this image
 
