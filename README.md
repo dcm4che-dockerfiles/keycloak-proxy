@@ -4,7 +4,7 @@ This is a Dockerfile for Keycloak-proxy which can be used for securing Kibana wh
 
 ## Supported tags and respective `Dockerfile` links
 
-- [`3.4.3-1` (*3.4.3-1/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak-proxy/blob/master/Dockerfile)
+- [`4.0.0-1` (*4.0.0-1/Dockerfile*)](https://github.com/dcm4che-dockerfiles/keycloak-proxy/blob/master/Dockerfile)
 
 ## How to use this image
 
@@ -74,6 +74,19 @@ This is the name of the realm configured in Keycloak for securing audit record r
 
 This environment variable sets the client ID for the Kibana client. This value is used in creation of client for securing 
 audit record repository which is running on Kibana. Default value set is `kibana`.
+
+#### `PUBLIC_CLIENT`
+
+If set to false, the adapter will send credentials for the client to Keycloak. The default value is `true`.
+
+#### `CREDENTIAL_SECRET`
+
+Specify the credential password of the application. This is REQUIRED for clients with 'Confidential' access type.
+
+#### `BEARER_ONLY`
+
+This should be set to true for services. If enabled the adapter will not attempt to authenticate users,
+but only verify bearer tokens. The default value is `false`.
 
 #### `TARGET_URL`
 

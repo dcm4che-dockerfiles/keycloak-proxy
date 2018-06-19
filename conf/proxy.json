@@ -12,9 +12,13 @@
             "adapter-config": {
                 "realm": "${env.REALM_NAME}",
                 "auth-server-url": "${env.AUTH_SERVER_URL}",
-                "public-client": true,
                 "resource": "${env.CLIENT_ID}",
                 "ssl-required": "${env.SSL_REQUIRED}",
+                "public-client": "${env.PUBLIC_CLIENT}",
+                "credentials": {
+                    "secret": "${env.CREDENTIAL_SECRET}"
+                },
+                "bearer-only" : "${env.BEARER_ONLY}",
                 "truststore": "${env.TRUSTSTORE}",
                 "truststore-password": "${env.TRUSTSTORE_PASSWORD}",
                 "allow-any-hostname": "${env.ALLOW_ANY_HOSTNAME}"

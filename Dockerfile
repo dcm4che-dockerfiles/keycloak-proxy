@@ -1,7 +1,7 @@
 FROM openjdk:8-jre
 
-ENV KEYCLOAK_VERSION 3.4.3.Final
-ENV ALPN_BOOT_VERSION 8.1.11.v20170118
+ENV KEYCLOAK_VERSION 4.0.0.Final
+ENV ALPN_BOOT_VERSION 8.1.12.v20180117
 
 RUN curl -L https://downloads.jboss.org/keycloak/${KEYCLOAK_VERSION}/keycloak-proxy-${KEYCLOAK_VERSION}.zip -O \
   && unzip keycloak-proxy-${KEYCLOAK_VERSION}.zip \
@@ -22,6 +22,9 @@ ENV HTTP_PORT=8080 \
     SSL_REQUIRED=external \
     REALM_NAME=dcm4che \
     CLIENT_ID=kibana \
+    PUBLIC_CLIENT=true \
+    CREDENTIAL_SECRET= \
+    BEARER_ONLY=false \
     TARGET_URL=http://kibana:5601 \
     BASE_PATH=/ \
     ROLE_ALLOWED=auditlog
