@@ -26,6 +26,13 @@
             "constraints": [
                 {
                     "pattern": "/*",
+                    "methods": [
+                        "OPTIONS"
+                    ],
+                    "permit": true
+                },
+                {
+                    "pattern": "/*",
                     "roles-allowed": [
                         "${env.ROLE_ALLOWED}"
                     ]
