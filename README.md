@@ -31,25 +31,37 @@ This environment variable sets the Https port of Wildfly. Default value is `8443
 
 #### `KEYSTORE`
 
-This environment variable sets the keystore used in ssl server identities in Wildfly configuration. Default value is 
+This environment variable sets the keystore used in ssl server identities. Default value is 
 `/opt/keycloak-proxy/conf/key.jks`.
 
 #### `KEYSTORE_PASSWORD`
 
-This environment variables sets the password of the keystore used in ssl server identities in Wildfly configuration. Default value is `secret`.
+This environment variables sets the password of the keystore used in ssl server. Default value is `secret`.
+
+#### `KEYSTORE_PASSWORD_FILE`
+
+Path to file containing the password of the keystore used in ssl server identities. Overwrites password set by `KEYSTORE_PASSWORD`.
 
 #### `KEY_PASSWORD`
 
-This environment variables sets the password of the key used in ssl server identities in Wildfly configuration. Default value is `secret`.
+This environment variables sets the password of the key used in ssl server identities. Default value is `secret`.
+
+#### `KEY_PASSWORD_FILE`
+
+Path to file containing the password of the key used in ssl server identities. Overwrites password set by `KEY_PASSWORD`.
 
 #### `TRUSTSTORE`
 
 This environment variable sets the truststore which will be used to verify Keycloak's certificate in Https communication.
 Default value is `/opt/keycloak-proxy/conf/cacerts.jks`.
 
-#### `TRUSSTORE_PASSWORD`
+#### `TRUSTSTORE_PASSWORD`
 
 This environment variable sets the password of the above truststore. Default value is `secret`.
+
+#### `TRUSTSTORE_PASSWORD_FILE`
+
+Path to file containing the password of the above truststore. Overwrites password set by `TRUSTSTORE_PASSWORD`.
 
 #### `ALLOW_ANY_HOSTNAME`
 
