@@ -36,19 +36,25 @@ This environment variable sets the keystore used in ssl server identities. Defau
 
 #### `KEYSTORE_PASSWORD`
 
-This environment variables sets the password of the keystore used in ssl server. Default value is `secret`.
+This environment variables sets the password of the keystore used in ssl server.
+Only effective if the file specified by `KEYSTORE_PASSWORD_FILE` does not exist. Default value is `secret`.
 
 #### `KEYSTORE_PASSWORD_FILE`
 
-Path to file containing the password of the keystore used in ssl server identities. Overwrites password set by `KEYSTORE_PASSWORD`.
+Path to file containing the password of the keystore used in ssl server identities.
+If the file does not exist, it will be created containing the password specified by `KEYSTORE_PASSWORD`. 
+Default value is `/tmp/keystore_password`.
 
 #### `KEY_PASSWORD`
 
-This environment variables sets the password of the key used in ssl server identities. Default value is `secret`.
+This environment variables sets the password of the key used in ssl server identities.
+Only effective if the file specified by `KEY_PASSWORD_FILE` does not exist. Default value is `secret`.
 
 #### `KEY_PASSWORD_FILE`
 
-Path to file containing the password of the key used in ssl server identities. Overwrites password set by `KEY_PASSWORD`.
+Path to file containing the password of the key used in ssl server identities.
+If the file does not exist, it will be created containing the password specified by `KEY_PASSWORD`. 
+Default value is `/tmp/key_password`.
 
 #### `TRUSTSTORE`
 
@@ -57,11 +63,14 @@ Default value is `/opt/keycloak-proxy/conf/cacerts.jks`.
 
 #### `TRUSTSTORE_PASSWORD`
 
-This environment variable sets the password of the above truststore. Default value is `secret`.
+This environment variable sets the password of the above truststore.
+Only effective if the file specified by `TRUSTSTORE_PASSWORD_FILE` does not exist. Default value is `secret`.
 
 #### `TRUSTSTORE_PASSWORD_FILE`
 
-Path to file containing the password of the above truststore. Overwrites password set by `TRUSTSTORE_PASSWORD`.
+Path to file containing the password of the above truststore.
+If the file does not exist, it will be created containing the password specified by `TRUSTSTORE_PASSWORD`. 
+Default value is `/tmp/truststore_password`.
 
 #### `ALLOW_ANY_HOSTNAME`
 
